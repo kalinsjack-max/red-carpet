@@ -6,12 +6,12 @@
 // 1) Firebase → Project settings → Your apps → Web app → "firebaseConfig" এখানে পেস্ট করুন।
 //    এগুলো খালি থাকলে সাইট DEMO MODE-এ চলে (ডেটা শুধু ঐ ব্রাউজারে থাকে — টেস্টের জন্য)।
 export const FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyDbcnG6Uv2mo0M4t6tVOPK564fwA-DRbFo",
+  authDomain: "redcarpet-14588.firebaseapp.com",
+  projectId: "redcarpet-14588",
+  storageBucket: "redcarpet-14588.firebasestorage.app",
+  messagingSenderId: "721623466551",
+  appId: "1:721623466551:web:8309ea418e5b47459435b2"
 };
 
 // 2) স্টাফের ইমেইল (Firebase → Authentication-এ এই ইমেইল দিয়ে ইউজার বানাবেন)।
