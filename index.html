@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Red Carpet</title>
+<meta name="description" content="Red Carpet — Destination wedding, convention centre, party hall and restaurant in Baniajuri, Ghior, Manikganj.">
+<meta name="theme-color" content="#4a0a0d">
+<link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body data-page="home">
+<div id="top"></div>
+<main id="main">
+
+<section class="hero"><div class="wrap hero-in">
+  <div class="hero-t">
+    <span class="badge" data-c="hero.badge"></span>
+    <h1 data-c="hero.title"></h1>
+    <p data-c="hero.subtitle"></p>
+    <div class="hero-cta"><a class="btn btn-gold" href="menu.html"><i class="fa-solid fa-bag-shopping"></i> <span data-i18n="order_now"></span></a>
+      <a class="btn btn-line" href="booking.html" data-i18n="book_now"></a></div>
+    <ul class="hero-facts"><li><i class="fa-solid fa-clock"></i> <span data-c="contact.hours"></span></li><li><i class="fa-solid fa-location-dot"></i> <span data-c="contact.address"></span></li></ul>
+  </div>
+  <div class="arch"><img data-c-src="hero.image" alt="" fetchpriority="high"></div>
+</div><svg class="ribbon" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0,70 C240,10 480,120 760,70 S1200,10 1440,60 L1440,120 L0,120Z" fill="var(--paper)"/><path d="M0,70 C240,10 480,120 760,70 S1200,10 1440,60" fill="none" stroke="var(--gold)" stroke-width="3"/></svg></section>
+
+<section class="sec"><div class="wrap">
+  <h2 class="h2" data-i18n="how_title"></h2>
+  <ol class="how">
+    <li><span>১</span><h3 data-i18n="how1_t"></h3><p data-i18n="how1_d"></p></li>
+    <li><span>২</span><h3 data-i18n="how2_t"></h3><p data-i18n="how2_d"></p></li>
+    <li><span>৩</span><h3 data-i18n="how3_t"></h3><p data-i18n="how3_d"></p></li>
+  </ol></div></section>
+
+<section class="sec sec-tint"><div class="wrap">
+  <div class="sec-h"><h2 class="h2" data-i18n="popular"></h2><a class="more" href="menu.html" data-i18n="view_menu"></a></div>
+  <div class="dishes" id="popular"></div></div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="sec-h"><h2 class="h2" data-i18n="services_h"></h2><a class="more" href="services.html" data-i18n="view_services"></a></div>
+  <div class="cards" id="svcGrid"></div></div></section>
+
+<section class="cta"><div class="wrap cta-in"><div><h2 data-i18n="cta_t"></h2><p data-i18n="cta_p"></p></div>
+  <a class="btn btn-gold" href="menu.html" data-i18n="order_now"></a></div></section>
+</main>
+<div id="bottom"></div>
+<script type="module">import { boot } from './js/pages.js'; boot();</script>
+</body>
+</html>

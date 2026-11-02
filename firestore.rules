@@ -1,0 +1,48 @@
+rules_version = '2';
+// ⚠ নিচের দুটি ইমেইল আপনার js/config.js-এর STAFF ইমেইলের সাথে হুবহু মিলতে হবে।
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin()   { return request.auth != null && request.auth.token.email in ['admin@redcarpet.com']; }
+    function isKitchen() { return isAdmin() || (request.auth != null && request.auth.token.email in ['kitchen@redcarpet.com']); }
+    function str(v, n)   { return v is string && v.size() <= n; }
+
+    // সাইটের কন্টেন্ট: সবাই দেখতে পারবে, শুধু অ্যাডমিন বদলাতে পারবে
+    match /settings/{id}   { allow read: if true; allow write: if isAdmin(); }
+    match /categories/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /menu/{id}       { allow read: if true; allow write: if isAdmin(); }
+    match /gallery/{id}    { allow read: if true; allow write: if isAdmin(); }
+
+    // অর্ডার নম্বরের কাউন্টার (প্রতিটি অর্ডারে ঠিক ১ করে বাড়ে)
+    match /counters/orders {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['n']) && request.resource.data.n == 1;
+      allow update: if request.resource.data.keys().hasOnly(['n']) && request.resource.data.n == resource.data.n + 1;
+    }
+
+    // অর্ডার: যে কেউ পাঠাতে পারবে (লগইন ছাড়া)। শুধু কিচেন/অ্যাডমিন সব অর্ডার দেখতে ও স্ট্যাটাস বদলাতে পারবে।
+    // কাস্টমার নিজের অর্ডারের লম্বা গোপন আইডি দিয়ে শুধু সেই অর্ডার দেখতে পারে (ট্র্যাক পেজ)।
+    match /orders/{id} {
+      allow get: if true;
+      allow list: if isKitchen();
+      allow create: if request.resource.data.status == 'preparing'
+        && request.resource.data.items is list && request.resource.data.items.size() > 0 && request.resource.data.items.size() <= 40
+        && request.resource.data.total is number && request.resource.data.total >= 0 && request.resource.data.total <= 500000
+        && request.resource.data.type in ['dine', 'takeaway']
+        && str(request.resource.data.table, 4) && str(request.resource.data.name, 60) && str(request.resource.data.phone, 20) && str(request.resource.data.note, 200);
+      allow update: if isAdmin()
+        || (isKitchen() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt'])
+            && request.resource.data.status in ['preparing', 'ready', 'completed', 'cancelled']);
+      allow delete: if isAdmin();
+    }
+
+    // বুকিং: যে কেউ পাঠাতে পারবে। শুধু অ্যাডমিন (মালিক) দেখতে/বদলাতে/মুছতে পারবে।
+    match /bookings/{id} {
+      allow create: if request.resource.data.status == 'new'
+        && str(request.resource.data.name, 80) && request.resource.data.name.size() > 0
+        && str(request.resource.data.phone, 20) && request.resource.data.phone.size() > 5
+        && str(request.resource.data.type, 60) && str(request.resource.data.date, 12) && str(request.resource.data.time, 8) && str(request.resource.data.note, 500);
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}
