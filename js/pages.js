@@ -86,7 +86,7 @@ function pageBooking() {
 /* ---------- Order tracking ---------- */
 // নতুন ট্র্যাকিং পেজের লেখা (i18n.js-এ হাত দিতে হয় না)  [বাংলা, English]
 const TK = {
-  live: ['লাইভ — নিজে থেকেই আপডেট হচ্ছে', 'Live — updates automatically'],
+  live: ['লাইভ আপডেট', 'Live Update'],
   progress: ['অর্ডারের অগ্রগতি', 'Order progress'],
   items: ['আপনার অর্ডার', 'Your order'],
   pay: ['পেমেন্ট কাউন্টারে — অনলাইনে কিছু দিতে হবে না।', 'Pay at the counter — nothing to pay online.'],
