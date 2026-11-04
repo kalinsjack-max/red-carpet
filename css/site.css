@@ -448,3 +448,8 @@ body.fab-min .fab,body.fab-min .howfab{opacity:0;transform:translateY(46px) scal
 /* footer shop name: keep it white on the dark footer */
 .ftr .brand b,.brand-f b{color:#fff}
 
+
+/* mobile: leave room under the footer text so the minimized bubble never covers "Developed By" */
+@media(max-width:900px){.ftr{padding-bottom:84px}}
+
+
