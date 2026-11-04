@@ -247,22 +247,21 @@ V.services.after = () => {
   $$('[data-m]').forEach(b => b.onclick = () => { const l = read(), i = +b.closest('.sv-r').dataset.i, d = +b.dataset.m; [l[i], l[i + d]] = [l[i + d], l[i]]; redraw(l); });
 };
 
+const GLIST = () => S().gallerySeeded ? [...st.gallery].sort((a, b) => a.order - b.order) : DEFAULT_GALLERY;
 const GBAR = `<div class="row" style="margin-bottom:14px"><button class="btn" id="gUp"><i class="fa-solid fa-upload"></i> ছবি আপলোড</button><button class="btn ghost" id="gUrl"><i class="fa-solid fa-link"></i> লিংক থেকে ছবি যোগ</button></div>`;
 V.gallery = () => {
-  if (!S().gallerySeeded) return `<h1>গ্যালারি</h1>` + GBAR + seedBox('গ্যালারি') + `<div class="panel" style="margin-top:14px"><h2>বর্তমান গ্যালারি (প্রিভিউ)</h2><p class="muted" style="margin-bottom:12px">ওয়েবসাইটে এই ছবিগুলোই এখন দেখাচ্ছে। ছবি আপলোড/লিংক যোগ করলে এই ডিফল্ট ছবিগুলোও নিজে থেকে ডেটাবেসে চলে আসবে — কিছু হারাবে না।</p><div class="qr-g">${DEFAULT_GALLERY.map(g => `<div class="qr"><img src="${esc(g.src)}" alt="" style="width:100%;height:130px;object-fit:cover;border-radius:8px"><div style="margin-top:8px;font-weight:600">${esc(g.caption?.bn)}</div><small class="muted">${esc(g.caption?.en)}</small></div>`).join('')}</div></div>`;
   return `<h1>গ্যালারি</h1>` + GBAR + `
-  <div class="qr-g">${[...st.gallery].sort((a, b) => a.order - b.order).map((g, i, a) => `<div class="qr" data-id="${esc(g.id)}"><img src="${esc(g.src)}" alt="" style="width:100%;height:130px;object-fit:cover;border-radius:8px"><input data-cap="bn" placeholder="ক্যাপশন (বাংলা)" value="${esc(g.caption?.bn)}" style="margin-top:8px"><input data-cap="en" placeholder="Caption (English)" value="${esc(g.caption?.en)}" style="margin-top:6px">
+  <div class="qr-g">${GLIST().map((g, i, a) => `<div class="qr" data-id="${esc(g.id)}"><img src="${esc(g.src)}" alt="" style="width:100%;height:130px;object-fit:cover;border-radius:8px"><input data-cap="bn" placeholder="ক্যাপশন (বাংলা)" value="${esc(g.caption?.bn)}" style="margin-top:8px"><input data-cap="en" placeholder="Caption (English)" value="${esc(g.caption?.en)}" style="margin-top:6px">
     <div class="row" style="margin-top:8px;justify-content:center"><button class="btn ghost sm" data-gm="-1" ${i === 0 ? 'disabled' : ''}>↑</button><button class="btn ghost sm" data-gm="1" ${i === a.length - 1 ? 'disabled' : ''}>↓</button><button class="btn sm" data-gs>সেভ</button><button class="btn bad sm" data-gd><i class="fa-solid fa-trash"></i></button></div></div>`).join('')}</div>`;
 };
 V.gallery.after = () => {
-  const seeded = !!S().gallerySeeded, list = [...st.gallery].sort((a, b) => a.order - b.order), base = seeded ? list.length : DEFAULT_GALLERY.length;
-  const add = src => act(async () => { if (!S().gallerySeeded) await DB.seedGallery(); await DB.set('gallery', DB.uid(), { src, caption: { bn: '', en: '' }, order: base }); });
+  const list = GLIST(), base = list.length, ensure = async () => { if (!S().gallerySeeded) await DB.seedGallery(); };   // first edit silently imports the default photos
+  const add = src => act(async () => { await ensure(); await DB.set('gallery', DB.uid(), { src, caption: { bn: '', en: '' }, order: base }); });
   $('#gUp').onclick = () => pickImage(1000, add, .75); $('#gUrl').onclick = async () => { const u = await promptBox({ icon: 'fa-link', title: 'লিংক থেকে ছবি যোগ করুন', message: 'ছবির সরাসরি লিংকটি এখানে পেস্ট করুন।', input: { placeholder: 'https://...', validate: v => /^https?:\/\/\S+$/.test(v) ? '' : 'সঠিক লিংক দিন (https:// দিয়ে শুরু)' } }); if (u) add(u); };
-  if (!seeded) { $('#seed').onclick = () => act(DB.seedGallery, 'ইমপোর্ট হয়েছে ✓'); $('#seedEmpty').onclick = () => act(() => DB.saveSettings({ gallerySeeded: true })); return; }
   $$('.qr[data-id]').forEach(c => { const id = c.dataset.id, i = list.findIndex(g => g.id === id);
-    $('[data-gs]', c).onclick = () => act(() => DB.update('gallery', id, { caption: { bn: $('[data-cap=bn]', c).value, en: $('[data-cap=en]', c).value } }));
-    $('[data-gd]', c).onclick = async () => { if (await sure('ছবিটি মুছে ফেলবেন?', 'ছবিটি গ্যালারি থেকে স্থায়ীভাবে মুছে যাবে।')) act(() => DB.del('gallery', id), 'মুছে ফেলা হয়েছে'); };
-    $$('[data-gm]', c).forEach(b => b.onclick = () => act(() => swap('gallery', list, i, +b.dataset.gm), 'সরানো হয়েছে')); });
+    $('[data-gs]', c).onclick = () => { const caption = { bn: $('[data-cap=bn]', c).value, en: $('[data-cap=en]', c).value }; act(async () => { await ensure(); await DB.update('gallery', id, { caption }); }); };
+    $('[data-gd]', c).onclick = async () => { if (await sure('ছবিটি মুছে ফেলবেন?', 'ছবিটি গ্যালারি থেকে স্থায়ীভাবে মুছে যাবে।')) act(async () => { await ensure(); await DB.del('gallery', id); }, 'মুছে ফেলা হয়েছে'); };
+    $$('[data-gm]', c).forEach(b => b.onclick = () => act(async () => { await ensure(); await swap('gallery', list, i, +b.dataset.gm); }, 'সরানো হয়েছে')); });
 };
 
 V.qr = () => `<h1>টেবিল QR কোড</h1><div class="panel"><p>প্রতিটি টেবিলে একটি QR কোড বসান। কাস্টমার স্ক্যান করলেই মেনু খুলবে এবং টেবিল নম্বর নিজে থেকে বসে যাবে।</p>
