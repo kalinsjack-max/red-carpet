@@ -443,3 +443,8 @@ body.fab-min .fab,body.fab-min .howfab{opacity:0;transform:translateY(46px) scal
 
 /* mobile: keep the 80px bottom space only while the cart bar is actually showing (no empty gap under the footer) */
 @media(max-width:900px){body{padding-bottom:0}body:has(#cartBar:not([hidden])){padding-bottom:80px}}
+
+
+/* footer shop name: keep it white on the dark footer */
+.ftr .brand b,.brand-f b{color:#fff}
+
