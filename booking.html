@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Red Carpet</title>
+<meta name="description" content="Red Carpet — Destination wedding, convention centre, party hall and restaurant in Baniajuri, Ghior, Manikganj.">
+<meta name="theme-color" content="#4a0a0d">
+<link rel="manifest" href="manifest.webmanifest">
+<meta property="og:type" content="restaurant.restaurant"><meta property="og:site_name" content="Red Carpet">
+<link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body data-page="booking">
+<div id="top"></div>
+<main id="main">
+
+<section class="page-h"><div class="wrap"><h1 data-i18n="b_title"></h1><p data-i18n="b_p"></p></div></section>
+<section class="sec"><div class="wrap book-g">
+  <div class="info">
+    <div class="ib"><i class="fa-solid fa-location-dot"></i><div><h4 data-i18n="location"></h4><p data-c="contact.address"></p><a data-c-link="contact.map" target="_blank" rel="noopener" class="more">Google Maps</a></div></div>
+    <div class="ib"><i class="fa-solid fa-phone"></i><div><h4 data-i18n="hotline"></h4><p><a data-c-tel data-c="contact.phone"></a></p><a data-c-wa class="more" target="_blank" rel="noopener" data-i18n="whatsapp"></a></div></div>
+    <div class="ib"><i class="fa-solid fa-clock"></i><div><h4 data-i18n="hours"></h4><p data-c="contact.hours"></p></div></div>
+  </div>
+  <div class="card-f">
+    <form id="bkForm">
+      <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div><label data-i18n="b_name"></label><input name="name" required maxlength="80" autocomplete="name"></div>
+      <div><label data-i18n="b_phone"></label><input name="phone" type="tel" required maxlength="20" inputmode="tel" pattern="[0-9+\- ]{6,20}" placeholder="01XXXXXXXXX" autocomplete="tel"></div>
+      <div><label data-i18n="b_type"></label><select name="type" id="b-type"></select></div>
+      <div class="row2"><div><label data-i18n="b_date"></label><input type="date" name="date" id="b-date" required></div>
+        <div><label data-i18n="b_time"></label><input type="time" name="time"></div></div>
+      <div><label data-i18n="b_guests"></label><input type="number" name="guests" min="1" max="5000" inputmode="numeric"></div>
+      <div><label><span data-i18n="b_note"></span> <small class="muted">(<span data-i18n="opt"></span>)</small></label><textarea name="note" rows="3" maxlength="500"></textarea></div>
+      <p class="err" id="bkErr" hidden></p>
+      <button class="btn btn-block" id="bkBtn" data-i18n="b_send"></button>
+    </form>
+    <div id="bkOk" class="okbox" hidden><i class="fa-solid fa-circle-check"></i><h3 data-i18n="b_ok_t"></h3><p data-i18n="b_ok_d"></p><button class="btn btn-ghost" id="bkAgain" data-i18n="b_another"></button></div>
+  </div></div></section>
+</main>
+<div id="bottom"></div>
+<script type="module">import { boot } from './js/pages.js'; boot();</script>
+</body>
+</html>
